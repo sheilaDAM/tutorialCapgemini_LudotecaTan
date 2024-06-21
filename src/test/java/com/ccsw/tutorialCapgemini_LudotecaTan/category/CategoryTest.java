@@ -52,14 +52,14 @@ public class CategoryTest {
 	public void findAllShouldReturnAllCategories() {
 
 		List<Category> list = new ArrayList<>();
-		list.add(mock(Category.class));
+		list.add(mock(Category.class)); //mock(Category.class) crea una instancia simulada de la clase Category, agregando un mock (simulación) de un objeto Category, simulando que hay una categoría en la bbdd
 
-		when(categoryRepository.findAll()).thenReturn(list);
+		when(categoryRepository.findAll()).thenReturn(list); //Cuando se llame al método findAll() que devuelva la lista (en este caso del test, devolverá 1, que es lo que pasamos en el mock anterior)
 
 		List<Category> categories = categoryService.findAll();
 
-		assertNotNull(categories);
-		assertEquals(1, categories.size());
+		assertNotNull(categories); //comprueba que la lista obtenida no sea null
+		assertEquals(1, categories.size()); //verifica que el tamaño de la lista sea 1
 	}
 
 	@Test
@@ -68,13 +68,13 @@ public class CategoryTest {
 		CategoryDto categoryDto = new CategoryDto();
 		categoryDto.setName(CATEGORY_NAME);
 
-		ArgumentCaptor<Category> category = ArgumentCaptor.forClass(Category.class);
+		ArgumentCaptor<Category> category = ArgumentCaptor.forClass(Category.class); //Captura los argumentos que se pasan a un método en un mock.
 
 		categoryService.save(null, categoryDto);
 
-		verify(categoryRepository).save(category.capture());
+		verify(categoryRepository).save(category.capture()); //Verifica que un método en un mock fue llamado con ciertos argumentos.
 
-		assertEquals(CATEGORY_NAME, category.getValue().getName());
+		assertEquals(CATEGORY_NAME, category.getValue().getName()); //Verifica que el método save del categoryRepository fue llamado y captura el argumento pasado
 	}
 	
 	@Test
@@ -89,6 +89,18 @@ public class CategoryTest {
 	  categoryService.save(EXISTS_CATEGORY_ID, categoryDto);
 
 	  verify(categoryRepository).save(category);
+	}
+	
+	
+	@Test
+	public void deleteExistsCategoryIdShouldDelete() throws Exception {
+
+	      Category category = mock(Category.class);
+	      when(categoryRepository.findById(EXISTS_CATEGORY_ID)).thenReturn(Optional.of(category)); //Optional.of(category): Crea un Optional que contiene el mock Category, simulando que el repositorio encuentra una categoría con el ID dado.
+
+	      categoryService.delete(EXISTS_CATEGORY_ID);
+
+	      verify(categoryRepository).deleteById(EXISTS_CATEGORY_ID); //Verifica que el método deleteById del repositorio fue llamado con el ID especificado, confirmando que el servicio intentó eliminar la categoría.
 	}
 
 }
