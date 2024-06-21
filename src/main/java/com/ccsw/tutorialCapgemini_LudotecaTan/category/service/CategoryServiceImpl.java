@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
     public void save(Long id, CategoryDto dto) {
 
-		 Category category;
+		 Category category = null;
 
          if (id == null) {
             category = new Category();

@@ -104,3 +104,8 @@ public class CategoryTest {
 	}
 
 }
+
+/*
+ * La clase Optional Se utiliza para representar valores que pueden estar presentes o ausentes, 
+ * proporcionando una alternativa clara y explícita a los valores nulos (null)
+*/
