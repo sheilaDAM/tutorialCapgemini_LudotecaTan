@@ -32,6 +32,16 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     AuthorRepository authorRepository;
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Author get(Long id) {
+
+        return this.authorRepository.findById(id).orElse(null);
+    }
+
 
     /**
      * {@inheritDoc}
@@ -53,7 +63,8 @@ public class AuthorServiceImpl implements AuthorService {
         if (id == null) {
             author = new Author();
         } else {
-            author = this.authorRepository.findById(id).orElse(null);
+            //author = this.authorRepository.findById(id).orElse(null);
+        	 author = this.get(id);
         }
 
         BeanUtils.copyProperties(data, author, "id");
@@ -67,7 +78,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void delete(Long id) throws Exception {
 
-        if(this.authorRepository.findById(id).orElse(null) == null){
+        //if(this.authorRepository.findById(id).orElse(null) == null){
+    	 if(this.get(id) == null){
             throw new Exception("Not exists");
         }
 

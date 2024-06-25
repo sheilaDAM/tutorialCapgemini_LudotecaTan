@@ -61,7 +61,17 @@ public class GameController {
 
     	 List<Game> games = gameService.find(title, idCategory);
 
-         return games.stream().map(e -> mapper.map(e, GameDto.class)).collect(Collectors.toList());
+         return games.stream().map(e -> mapper.map(e, GameDto.class)).collect(Collectors.toList()); //Esta línea transforma la lista de Game en una lista de GameDto
+         
+         /*
+          * games.stream(): Convierte la lista de Game en un stream, lo que permite realizar operaciones funcionales sobre la lista.
+			.map(e -> mapper.map(e, GameDto.class)): Aplica una función a cada elemento del stream. 
+			En este caso, usa el mapper (probablemente un ModelMapper o similar) para convertir cada objeto Game en un objeto GameDto.
+			e -> mapper.map(e, GameDto.class): Esta es una expresión lambda que toma cada objeto Game (e) 
+			y lo convierte en un GameDto utilizando el mapper.
+			.collect(Collectors.toList()): Recoge los elementos transformados del stream y los convierte de nuevo en una lista.
+          */
+    
     }
 
     /**

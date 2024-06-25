@@ -25,6 +25,14 @@ import com.ccsw.tutorialCapgemini_LudotecaTan.category.model.CategoryDto;
 
 public interface CategoryService {
 	
+	/**
+     * Recupera una {@link Category} a partir de su ID
+     *
+     * @param id PK de la entidad
+     * @return {@link Category}
+     */
+    Category get(Long id);
+	
 	 /**
      * Método para recuperar todas las categorías {@link Category}
      *

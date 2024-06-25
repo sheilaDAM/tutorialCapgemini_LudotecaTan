@@ -3,6 +3,11 @@
  */
 package com.ccsw.tutorialCapgemini_LudotecaTan.game.repository;
 
+import java.util.List;
+
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.game.model.Game;
@@ -18,6 +23,10 @@ import com.ccsw.tutorialCapgemini_LudotecaTan.game.model.Game;
  *
  **/
 
-public interface GameRepository extends CrudRepository<Game, Long> {
+public interface GameRepository extends CrudRepository<Game, Long>,  JpaSpecificationExecutor<Game> {
+	
+	 @Override
+	 @EntityGraph(attributePaths = {"category", "author"})
+	 List<Game> findAll(Specification<Game> spec);
 
 }
