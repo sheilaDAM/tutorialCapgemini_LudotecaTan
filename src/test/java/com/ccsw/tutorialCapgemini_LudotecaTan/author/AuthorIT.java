@@ -60,6 +60,10 @@ public class AuthorIT {
 
 	@Test
 	public void findFirstPageWithFiveSizeShouldReturnFirstFiveResults() {
+		
+		/*
+		 * Verificamos que la primera página de resultados con un tamaño de página de 5 devuelve los primeros cinco autores.
+		 */
 
 		AuthorSearchDto searchDto = new AuthorSearchDto();
 		searchDto.setPageable(new PageableRequest(0, PAGE_SIZE));
@@ -73,10 +77,22 @@ public class AuthorIT {
 		assertNotNull(response);
 		assertEquals(TOTAL_AUTHORS, response.getBody().getTotalElements());
 		assertEquals(PAGE_SIZE, response.getBody().getContent().size());
+		
+		/*
+		 * Creamos un AuthorSearchDto con una solicitud de página de tamaño PAGE_SIZE.
+		   Enviamos una solicitud HTTP POST al endpoint /author.
+		   Verificamos que la respuesta no es nula.
+           Verificamos que el número total de autores es TOTAL_AUTHORS.
+           Verificamos que el tamaño del contenido de la respuesta es PAGE_SIZE.
+		 */
 	}
 
 	@Test
 	public void findSecondPageWithFiveSizeShouldReturnLastResult() {
+		
+		/*
+		 *  Verificamos que la segunda página de resultados devuelve el número correcto de autores restantes.
+		 */
 
 		int elementsCount = TOTAL_AUTHORS - PAGE_SIZE;
 
@@ -89,10 +105,23 @@ public class AuthorIT {
 		assertNotNull(response);
 		assertEquals(TOTAL_AUTHORS, response.getBody().getTotalElements());
 		assertEquals(elementsCount, response.getBody().getContent().size());
+		
+		/*
+		 * Calculamps el número de elementos esperados en la segunda página.
+           Creamos un AuthorSearchDto con una solicitud de página de tamaño PAGE_SIZE.
+           Enviamos una solicitud HTTP POST al endpoint /author.
+           Verificamos que la respuesta no es nula.
+           Verificamos que el número total de autores es TOTAL_AUTHORS.
+           Verificamos que el tamaño del contenido de la respuesta es elementsCount.
+		 */
 	}
 
 	@Test
 	public void saveWithoutIdShouldCreateNewAuthor() {
+		
+		/*
+		 * Verificamos que un nuevo autor se crea correctamente cuando no se proporciona un ID.
+		 */
 
 		long newAuthorId = TOTAL_AUTHORS + 1;
 		long newAuthorSize = TOTAL_AUTHORS + 1;
@@ -116,6 +145,17 @@ public class AuthorIT {
 				.findFirst().orElse(null);
 		assertNotNull(author);
 		assertEquals(NEW_AUTHOR_NAME, author.getName());
+		
+		/*
+		 * Creamos un nuevo AuthorDto con el nombre y la nacionalidad del nuevo autor.
+		   Enviamos una solicitud HTTP PUT al endpoint /author para crear el nuevo autor.
+		   Creamos un AuthorSearchDto con una solicitud de página de tamaño newAuthorSize.
+		   Enviamos una solicitud HTTP POST al endpoint /author para recuperar todos los autores.
+		   Verificamos que la respuesta no es nula.
+		   Verificamos que el número total de autores es newAuthorSize.
+		   Filtramos la respuesta para encontrar el nuevo autor y verificar que no es nulo.
+		   Verificamos que el nombre del nuevo autor es NEW_AUTHOR_NAME.
+		 */
 	}
 
 	@Test
