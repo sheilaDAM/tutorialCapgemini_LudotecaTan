@@ -9,7 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.Author;
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.Client;
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.ClientDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.repository.ClientRepository;

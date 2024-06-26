@@ -5,7 +5,6 @@ package com.ccsw.tutorialCapgemini_LudotecaTan.client.service;
 
 import java.util.List;
 
-import com.ccsw.tutorialCapgemini_LudotecaTan.category.model.Category;
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.Client;
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.ClientDto;
 
