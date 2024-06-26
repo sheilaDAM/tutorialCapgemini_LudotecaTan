@@ -6,6 +6,8 @@ package com.ccsw.tutorialCapgemini_LudotecaTan.author;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,6 +59,21 @@ public class AuthorIT {
 
 	ParameterizedTypeReference<ResponsePage<AuthorDto>> responseTypePage = new ParameterizedTypeReference<ResponsePage<AuthorDto>>() {
 	};
+	
+	ParameterizedTypeReference<List<AuthorDto>> responseTypeList = new ParameterizedTypeReference<List<AuthorDto>>(){};
+
+	
+	@Test
+	public void findAllShouldReturnAllAuthor() {
+
+	      ResponseEntity<List<AuthorDto>> response = restTemplate.exchange(
+	    		  LOCALHOST + port + SERVICE_PATH, 
+	    		  HttpMethod.GET, 
+	    		  null, responseTypeList);
+
+	      assertNotNull(response);
+	      assertEquals(TOTAL_AUTHORS, response.getBody().size());
+	}
 
 	@Test
 	public void findFirstPageWithFiveSizeShouldReturnFirstFiveResults() {

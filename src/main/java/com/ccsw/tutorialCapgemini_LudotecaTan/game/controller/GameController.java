@@ -39,53 +39,57 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @CrossOrigin(origins = "*")
 public class GameController {
-	
-	 @Autowired
-	    GameService gameService;
 
-	    @Autowired
-	    ModelMapper mapper;
-	
+	@Autowired
+	GameService gameService;
 
-    /**
-     * Método para recuperar una lista de {@link Game}
-     *
-     * @param title título del juego
-     * @param idCategory PK de la categoría
-     * @return {@link List} de {@link GameDto}
-     */
-    @Operation(summary = "Find", description = "Method that return a filtered list of Games")
-    @RequestMapping(path = "", method = RequestMethod.GET)
-    public List<GameDto> find(@RequestParam(value = "title", required = false) String title,
-                              @RequestParam(value = "idCategory", required = false) Long idCategory) {
+	@Autowired
+	ModelMapper mapper;
 
-    	 List<Game> games = gameService.find(title, idCategory);
+	/**
+	 * Método para recuperar una lista de {@link Game}
+	 *
+	 * @param title      título del juego
+	 * @param idCategory PK de la categoría
+	 * @return {@link List} de {@link GameDto}
+	 */
+	@Operation(summary = "Find", description = "Method that return a filtered list of Games")
+	@RequestMapping(path = "", method = RequestMethod.GET)
+	public List<GameDto> find(@RequestParam(value = "title", required = false) String title,
+			@RequestParam(value = "idCategory", required = false) Long idCategory) {
 
-         return games.stream().map(e -> mapper.map(e, GameDto.class)).collect(Collectors.toList()); //Esta línea transforma la lista de Game en una lista de GameDto
-         
-         /*
-          * games.stream(): Convierte la lista de Game en un stream, lo que permite realizar operaciones funcionales sobre la lista.
-			.map(e -> mapper.map(e, GameDto.class)): Aplica una función a cada elemento del stream. 
-			En este caso, usa el mapper (probablemente un ModelMapper o similar) para convertir cada objeto Game en un objeto GameDto.
-			e -> mapper.map(e, GameDto.class): Esta es una expresión lambda que toma cada objeto Game (e) 
-			y lo convierte en un GameDto utilizando el mapper.
-			.collect(Collectors.toList()): Recoge los elementos transformados del stream y los convierte de nuevo en una lista.
-          */
-    
-    }
+		List<Game> games = gameService.find(title, idCategory);
 
-    /**
-     * Método para crear o actualizar un {@link Game}
-     *
-     * @param id PK de la entidad
-     * @param dto datos de la entidad
-     */
-    @Operation(summary = "Save or Update", description = "Method that saves or updates a Game")
-    @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
-    public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody GameDto dto) {
-    	
-    	   gameService.save(id, dto);
-    }
+		return games.stream().map(e -> mapper.map(e, GameDto.class)).collect(Collectors.toList()); // Esta línea
+																									// transforma la
+																									// lista de Game en
+																									// una lista de
+																									// GameDto
 
+		/*
+		 * games.stream(): Convierte la lista de Game en un stream, lo que permite
+		 * realizar operaciones funcionales sobre la lista. .map(e -> mapper.map(e,
+		 * GameDto.class)): Aplica una función a cada elemento del stream. En este caso,
+		 * usa el mapper (probablemente un ModelMapper o similar) para convertir cada
+		 * objeto Game en un objeto GameDto. e -> mapper.map(e, GameDto.class): Esta es
+		 * una expresión lambda que toma cada objeto Game (e) y lo convierte en un
+		 * GameDto utilizando el mapper. .collect(Collectors.toList()): Recoge los
+		 * elementos transformados del stream y los convierte de nuevo en una lista.
+		 */
+
+	}
+
+	/**
+	 * Método para crear o actualizar un {@link Game}
+	 *
+	 * @param id  PK de la entidad
+	 * @param dto datos de la entidad
+	 */
+	@Operation(summary = "Save or Update", description = "Method that saves or updates a Game")
+	@RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
+	public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody GameDto dto) {
+
+		gameService.save(id, dto);
+	}
 
 }

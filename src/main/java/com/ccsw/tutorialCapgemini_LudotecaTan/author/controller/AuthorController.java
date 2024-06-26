@@ -3,6 +3,7 @@
  */
 package com.ccsw.tutorialCapgemini_LudotecaTan.author.controller;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -46,6 +47,20 @@ public class AuthorController {
 
     @Autowired
     ModelMapper mapper;
+    
+    /**
+     * Recupera un listado de autores {@link Author}
+     *
+     * @return {@link List} de {@link AuthorDto}
+     */
+    @Operation(summary = "Find", description = "Method that return a list of Authors")
+    @RequestMapping(path = "", method = RequestMethod.GET)
+    public List<AuthorDto> findAll() {
+
+        List<Author> authors = this.authorService.findAll();
+
+        return authors.stream().map(e -> mapper.map(e, AuthorDto.class)).collect(Collectors.toList());
+    }
 
     /**
      * Método para recuperar un listado paginado de {@link Author}

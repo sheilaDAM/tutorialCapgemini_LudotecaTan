@@ -35,50 +35,49 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class GameServiceImpl implements GameService {
 
-    @Autowired
-    GameRepository gameRepository;
-    
-    @Autowired
-    AuthorService authorService;
+	@Autowired
+	GameRepository gameRepository;
 
-    @Autowired
-    CategoryService categoryService;
+	@Autowired
+	AuthorService authorService;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Game> find(String title, Long idCategory) {
+	@Autowired
+	CategoryService categoryService;
 
-    	GameSpecification titleSpec = new GameSpecification(new SearchCriteria("title", ":", title));
-        GameSpecification categorySpec = new GameSpecification(new SearchCriteria("category.id", ":", idCategory));
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Game> find(String title, Long idCategory) {
 
-        Specification<Game> spec = Specification.where(titleSpec).and(categorySpec);
+		GameSpecification titleSpec = new GameSpecification(new SearchCriteria("title", ":", title));
+		GameSpecification categorySpec = new GameSpecification(new SearchCriteria("category.id", ":", idCategory));
 
-        return this.gameRepository.findAll(spec);
-    }
+		Specification<Game> spec = Specification.where(titleSpec).and(categorySpec);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void save(Long id, GameDto dto) {
+		return this.gameRepository.findAll(spec);
+	}
 
-        Game game;
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void save(Long id, GameDto dto) {
 
-        if (id == null) {
-            game = new Game();
-        } else {
-            game = this.gameRepository.findById(id).orElse(null);
-        }
+		Game game;
 
-        BeanUtils.copyProperties(dto, game, "id", "author", "category");
-        
-        game.setAuthor(authorService.get(dto.getAuthor().getId()));
-        game.setCategory(categoryService.get(dto.getCategory().getId()));
+		if (id == null) {
+			game = new Game();
+		} else {
+			game = this.gameRepository.findById(id).orElse(null);
+		}
 
-        this.gameRepository.save(game);
-    }
+		BeanUtils.copyProperties(dto, game, "id", "author", "category");
 
+		game.setAuthor(authorService.get(dto.getAuthor().getId()));
+		game.setCategory(categoryService.get(dto.getCategory().getId()));
+
+		this.gameRepository.save(game);
+	}
 
 }

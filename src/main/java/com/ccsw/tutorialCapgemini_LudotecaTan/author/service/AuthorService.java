@@ -3,6 +3,8 @@
  */
 package com.ccsw.tutorialCapgemini_LudotecaTan.author.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.Author;
@@ -30,6 +32,13 @@ public interface AuthorService {
      */
     Author get(Long id);
 	
+    /**
+     * Recupera un listado de autores {@link Author}
+     *
+     * @return {@link List} de {@link Author}
+     */
+    List<Author> findAll();
+    
 	/**
      * Método para recuperar un listado paginado de {@link Author}
      *
