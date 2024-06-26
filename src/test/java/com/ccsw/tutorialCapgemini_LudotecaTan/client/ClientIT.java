@@ -46,12 +46,13 @@ import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.ClientDto;
 public class ClientIT {
 
 	public static final String LOCALHOST = "http://localhost:";
-	public static final String SERVICE_PATH = "/author";
+	public static final String SERVICE_PATH = "/client";
 
 	public static final Long NEW_CLIENT_ID = 8L;
-	public static final Long DELETE_CLIENT_ID = 8L;
+	public static final Long DELETE_CLIENT_ID = 4L;
 	public static final Long MODIFY_CLIENT_ID = 3L;
 	public static final String NEW_CLIENT_NAME = "Nuevo Cliente 8";
+	private static final int TOTAL_CLIENTS = 7;
 
 	@LocalServerPort
 	private int port;
@@ -69,11 +70,14 @@ public class ClientIT {
 				HttpMethod.GET, null, responseType);
 
 		assertNotNull(response);
-		assertEquals(3, response.getBody().size());
+		assertEquals(TOTAL_CLIENTS, response.getBody().size());
 	}
 
 	@Test
 	public void saveWithoutIdShouldCreateNewClient() {
+		
+		long newClientId = TOTAL_CLIENTS + 1;
+		long newClientSize = TOTAL_CLIENTS + 1;
 
 		ClientDto dto = new ClientDto();
 		dto.setName(NEW_CLIENT_NAME);
@@ -83,12 +87,13 @@ public class ClientIT {
 		ResponseEntity<List<ClientDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH,
 				HttpMethod.GET, null, responseType);
 		assertNotNull(response);
-		assertEquals(4, response.getBody().size());
+		assertEquals(newClientSize, response.getBody().size());
 
-		ClientDto clientSearch = response.getBody().stream().filter(item -> item.getId().equals(NEW_CLIENT_ID))
+		ClientDto clientSearch = response.getBody().stream().filter(item -> item.getId().equals(newClientId))
 				.findFirst().orElse(null);
 		assertNotNull(clientSearch);
 		assertEquals(NEW_CLIENT_NAME, clientSearch.getName());
+		
 	}
 
 	@Test
@@ -103,7 +108,7 @@ public class ClientIT {
 		ResponseEntity<List<ClientDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH,
 				HttpMethod.GET, null, responseType);
 		assertNotNull(response);
-		assertEquals(3, response.getBody().size());
+		assertEquals(TOTAL_CLIENTS, response.getBody().size());
 
 		ClientDto clientSearch = response.getBody().stream().filter(item -> item.getId().equals(MODIFY_CLIENT_ID))
 				.findFirst().orElse(null);
@@ -125,6 +130,8 @@ public class ClientIT {
 
 	@Test
 	public void deleteWithExistsIdShouldDeleteClient() {
+		
+		long newAuthorsSize = TOTAL_CLIENTS - 1;
 
 		restTemplate.exchange(LOCALHOST + port + SERVICE_PATH + "/" + DELETE_CLIENT_ID, HttpMethod.DELETE, null,
 				Void.class);
@@ -132,7 +139,7 @@ public class ClientIT {
 		ResponseEntity<List<ClientDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH,
 				HttpMethod.GET, null, responseType);
 		assertNotNull(response);
-		assertEquals(2, response.getBody().size());
+		assertEquals(newAuthorsSize, response.getBody().size());
 	}
 
 	@Test
