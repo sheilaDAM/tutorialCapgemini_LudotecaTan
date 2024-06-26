@@ -42,8 +42,9 @@ public interface ClientService {
      *
      * @param id PK de la entidad
      * @param dto datos de la entidad
+     * @throws Exception 
      */
-    void save(Long id, ClientDto dto);
+    void save(Long id, ClientDto dto) throws Exception;
 
     /**
      * Método para borrar un {@link Client}

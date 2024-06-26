@@ -55,21 +55,17 @@ public class ClientServiceImpl implements ClientService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void save(Long id, ClientDto dto) {
+	public void save(Long id, ClientDto dto) throws Exception {
 
-		Client client;
+		if (clientRepository.clientAlreadyExistsByName(dto.getName())) {
+            throw new Exception("Client with this name already exists");
+        }
 
-		if (id == null) {
-			client = new Client();
-		} else {
+        Client client = (id == null) ? new Client() : this.get(id);
 
-			client = this.get(id);
-		}
-
-		BeanUtils.copyProperties(dto, client, "id");
-
-		this.clientRepository.save(client);
-
+        BeanUtils.copyProperties(dto, client, "id");
+        this.clientRepository.save(client);
+		
 	}
 
 	/**
@@ -78,11 +74,11 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public void delete(Long id) throws Exception {
 
-		if(this.get(id) == null){
-            throw new Exception("Not exists");
-        }
+		if (this.get(id) == null) {
+			throw new Exception("Not exists");
+		}
 
-        this.clientRepository.deleteById(id);
+		this.clientRepository.deleteById(id);
 	}
 
 }
