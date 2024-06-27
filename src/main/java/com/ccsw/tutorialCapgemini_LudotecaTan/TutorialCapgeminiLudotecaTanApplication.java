@@ -8,6 +8,6 @@ public class TutorialCapgeminiLudotecaTanApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TutorialCapgeminiLudotecaTanApplication.class, args);
-	}
+	} 
 
 }

@@ -97,7 +97,7 @@ public class ClientTest {
 	}
     
 	@Test
-	public void saveNotExistsClientIdShouldInsert() {
+	public void saveNotExistsClientIdShouldInsert() throws Exception {
 
 		ClientDto clientDto = new ClientDto();
 		clientDto.setName(CLIENT_NAME);
@@ -112,7 +112,7 @@ public class ClientTest {
 	}
     
     @Test
-	public void saveExistsClientIdShouldUpdate() {
+	public void saveExistsClientIdShouldUpdate() throws Exception {
 
 	  ClientDto clientDto = new ClientDto();
 	  clientDto.setName(CLIENT_NAME);

@@ -57,15 +57,27 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public void save(Long id, ClientDto dto) throws Exception {
 
-		if (clientRepository.clientAlreadyExistsByName(dto.getName())) {
-            throw new Exception("Client with this name already exists");
-        }
+		Client client;
 
-        Client client = (id == null) ? new Client() : this.get(id);
+		if (dto.getName() == null || dto.getName().trim().isEmpty()) {
+			throw new Exception("Client name cannot be empty field.");
+		}
 
-        BeanUtils.copyProperties(dto, client, "id");
-        this.clientRepository.save(client);
-		
+		if (id == null) {
+			if (clientRepository.clientAlreadyExistsByName(dto.getName())) {
+				throw new Exception("Client with this name already exists.");
+			}
+			client = new Client();
+		} else {
+			if (clientRepository.clientAlreadyExistsByName(dto.getName())) {
+				throw new Exception("Client with this name already exists.");
+			}
+			client = this.get(id);
+		}
+
+		BeanUtils.copyProperties(dto, client, "id");
+		this.clientRepository.save(client);
+
 	}
 
 	/**

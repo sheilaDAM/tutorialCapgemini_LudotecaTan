@@ -3,7 +3,9 @@
  */
 package com.ccsw.tutorialCapgemini_LudotecaTan.client.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.Client;
 
@@ -28,6 +30,17 @@ import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.Client;
 public interface ClientRepository extends CrudRepository<Client, Long> {
 	
 	//añadimos una consulta a bbdd para verificar si el nombre de un Nuevo cliente ya existe
-	boolean clientAlreadyExistsByName(String name);
+	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN TRUE ELSE FALSE END FROM Client c WHERE c.name = :name")
+	boolean clientAlreadyExistsByName(@Param("name") String name);
+	
+	/*
+	 * Esta consulta cuenta el número de clientes que ya existe en la bbdd con el nombre dado,
+	 * CASE WHEN es similar a si utilizáramos if-else, se evalúa una condición.
+	 * si esa condición es mayor que cero THEN TRUE es que sí, y devuelve TRUE, ELSE FALSE, es si no existe, no será >0,
+	 * por tanto devolverá FALSE y luego el END termina la declaración CASE. 
+	 * La consulta es sobre la tabla Client (FROM Client y luego la condición)
+	 * @Param("name") es el parámetro que le pasamos a la consulta como :name, al llamar al método para utilizarlo,
+	 * se le pasará el parámetro string.
+	 */
 
 }
