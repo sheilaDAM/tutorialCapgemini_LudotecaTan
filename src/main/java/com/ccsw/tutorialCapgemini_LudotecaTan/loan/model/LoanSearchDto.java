@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ccsw.tutorialCapgemini_LudotecaTan.loan;
+package com.ccsw.tutorialCapgemini_LudotecaTan.loan.model;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.common.pagination.PageableRequest;
 

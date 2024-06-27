@@ -23,3 +23,19 @@ INSERT INTO client(name) VALUES ('Carla');
 INSERT INTO client(name) VALUES ('Eve');
 INSERT INTO client(name) VALUES ('Lola');
 INSERT INTO client(name) VALUES ('Manuela');
+
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (1, 1, '2024-07-15', '2024-07-19');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (1, 2, '2024-07-20', '2024-07-24');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (2, 3, '2024-07-15', '2024-07-17');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (2, 4, '2024-07-18', '2024-07-21');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (3, 5, '2024-07-15', '2024-07-19');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (3, 6, '2024-07-20', '2024-07-23');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (3, 2, '2024-07-25', '2024-07-27');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (4, 1, '2024-07-15', '2024-07-16');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (4, 3, '2024-07-17', '2024-07-20');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (5, 4, '2024-07-21', '2024-07-24');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (6, 5, '2024-07-15', '2024-07-18');
+INSERT INTO loan (client_id, game_id, start_loan_date, end_loan_date) VALUES (7, 6, '2024-07-19', '2024-07-22');
+
+
+

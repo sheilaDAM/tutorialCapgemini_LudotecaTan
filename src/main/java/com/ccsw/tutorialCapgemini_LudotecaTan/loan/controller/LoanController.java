@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.Author;
 import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.AuthorDto;
-import com.ccsw.tutorialCapgemini_LudotecaTan.loan.LoanSearchDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
+import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.service.LoanService;
 
 import io.swagger.v3.oas.annotations.Operation;

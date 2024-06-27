@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.ccsw.tutorialCapgemini_LudotecaTan.loan.LoanSearchDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
+import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
 
 /**
  * Project info :)

@@ -11,9 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.Author;
-import com.ccsw.tutorialCapgemini_LudotecaTan.loan.LoanSearchDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
+import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.repository.LoanRepository;
 
 import jakarta.transaction.Transactional;

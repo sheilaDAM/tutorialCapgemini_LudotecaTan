@@ -42,11 +42,15 @@ public class Loan {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
+	//1 mismo cliente podrá tener hasta un máximo de 2 juegos por día (o rango de fecha que coincida) 
+	//Si ya tiene dos juegos prestados dentro de cierto rango de fecha, no se podrá prestar otro en esas mismas fecha.
 	@ManyToOne
 	@JoinColumn(name = "client_id", nullable = false)
 	private Client client;
 
-	@OneToOne
+	//1 juego puede pertenecer a varios préstamos, pero no a dos clientes diferentes en un mismo día,
+	//no puede estar prestado a más de un cliente para ninguno de los días que contemplan las fechas actuales de rango
+	@ManyToOne
 	@JoinColumn(name = "game_id", nullable = false)
 	private Game game;
 
