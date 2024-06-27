@@ -21,7 +21,7 @@ import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.Author;
  **/
 
 public interface AuthorRepository extends CrudRepository<Author, Long> {
-	//Si extiende de JpaRepository ya tendrías el PagingAndSortingRepository para poder paginar y ordenar, además de incorporar CrudRepository
+	//Si extiende de JpaRepository ya tendríamos el PagingAndSortingRepository para poder paginar y ordenar, además de incorporar CrudRepository
 	 /**
      * Método para recuperar un listado paginado de {@link Author}
      *

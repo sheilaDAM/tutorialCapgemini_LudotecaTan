@@ -18,95 +18,95 @@ import com.ccsw.tutorialCapgemini_LudotecaTan.category.model.CategoryDto;
  **/
 
 public class GameDto {
-	
-	  private Long id;
 
-	    private String title;
+	private Long id;
 
-	    private String age;
+	private String title;
 
-	    private CategoryDto category;
+	private String age;
 
-	    private AuthorDto author;
+	private CategoryDto category;
 
-	    /**
-	     * @return id
-	     */
-	    public Long getId() {
+	private AuthorDto author;
 
-	        return this.id;
-	    }
+	/**
+	 * @return id
+	 */
+	public Long getId() {
 
-	    /**
-	     * @param id new value of {@link #getId}.
-	     */
-	    public void setId(Long id) {
+		return this.id;
+	}
 
-	        this.id = id;
-	    }
+	/**
+	 * @param id new value of {@link #getId}.
+	 */
+	public void setId(Long id) {
 
-	    /**
-	     * @return title
-	     */
-	    public String getTitle() {
+		this.id = id;
+	}
 
-	        return this.title;
-	    }
+	/**
+	 * @return title
+	 */
+	public String getTitle() {
 
-	    /**
-	     * @param title new value of {@link #getTitle}.
-	     */
-	    public void setTitle(String title) {
+		return this.title;
+	}
 
-	        this.title = title;
-	    }
+	/**
+	 * @param title new value of {@link #getTitle}.
+	 */
+	public void setTitle(String title) {
 
-	    /**
-	     * @return age
-	     */
-	    public String getAge() {
+		this.title = title;
+	}
 
-	        return this.age;
-	    }
+	/**
+	 * @return age
+	 */
+	public String getAge() {
 
-	    /**
-	     * @param age new value of {@link #getAge}.
-	     */
-	    public void setAge(String age) {
+		return this.age;
+	}
 
-	        this.age = age;
-	    }
+	/**
+	 * @param age new value of {@link #getAge}.
+	 */
+	public void setAge(String age) {
 
-	    /**
-	     * @return category
-	     */
-	    public CategoryDto getCategory() {
+		this.age = age;
+	}
 
-	        return this.category;
-	    }
+	/**
+	 * @return category
+	 */
+	public CategoryDto getCategory() {
 
-	    /**
-	     * @param category new value of {@link #getCategory}.
-	     */
-	    public void setCategory(CategoryDto category) {
+		return this.category;
+	}
 
-	        this.category = category;
-	    }
+	/**
+	 * @param category new value of {@link #getCategory}.
+	 */
+	public void setCategory(CategoryDto category) {
 
-	    /**
-	     * @return author
-	     */
-	    public AuthorDto getAuthor() {
+		this.category = category;
+	}
 
-	        return this.author;
-	    }
+	/**
+	 * @return author
+	 */
+	public AuthorDto getAuthor() {
 
-	    /**
-	     * @param author new value of {@link #getAuthor}.
-	     */
-	    public void setAuthor(AuthorDto author) {
+		return this.author;
+	}
 
-	        this.author = author;
-	    }
+	/**
+	 * @param author new value of {@link #getAuthor}.
+	 */
+	public void setAuthor(AuthorDto author) {
+
+		this.author = author;
+	}
 
 }
