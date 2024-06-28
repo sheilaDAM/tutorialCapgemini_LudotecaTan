@@ -205,21 +205,29 @@ public class GameIT {
           dto.setAuthor(authorDto);
           dto.setCategory(categoryDto);
 
+          //Se prepara un Map para los parámetros de consulta. Aquí se agrega el título del juego y se deja la categoría como null
           Map<String, Object> params = new HashMap<>();
           params.put(TITLE_PARAM, NEW_TITLE);
           params.put(CATEGORY_ID_PARAM, null);
 
-          ResponseEntity<List<GameDto>> response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
+          //Se hace una llamada GET para verificar que no existe ningún juego con el título especificado.
+          ResponseEntity<List<GameDto>> response = restTemplate.exchange(getUrlWithParams(), 
+        		  HttpMethod.GET, 
+        		  null, 
+        		  responseType, params);
 
-          assertNotNull(response);
-          assertEquals(0, response.getBody().size());
+          assertNotNull(response); //asegura que la respuesta no sea nula.
+          assertEquals(0, response.getBody().size()); //asegura que no haya juegos con el título especificado antes de intentar guardar el nuevo juego.
 
-          restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, HttpMethod.PUT, new HttpEntity<>(dto), Void.class);
+          //Se hace una llamada PUT para guardar el nuevo juego utilizando los datos en GameDto
+          restTemplate.exchange(LOCALHOST + port + SERVICE_PATH, 
+        		  HttpMethod.PUT, new HttpEntity<>(dto), Void.class);
 
+          //Se hace otra llamada GET para verificar que el juego ahora existe con el título especificado
           response = restTemplate.exchange(getUrlWithParams(), HttpMethod.GET, null, responseType, params);
 
-          assertNotNull(response);
-          assertEquals(1, response.getBody().size());
+          assertNotNull(response); //asegura que la respuesta no sea nula.
+          assertEquals(1, response.getBody().size()); //asegura que ahora haya exactamente un juego con el título especificado después de guardarlo
     }
 
     @Test

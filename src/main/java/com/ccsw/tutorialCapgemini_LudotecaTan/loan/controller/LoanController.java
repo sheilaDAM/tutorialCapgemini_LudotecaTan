@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.Author;
-import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.AuthorDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
@@ -56,15 +56,15 @@ public class LoanController {
 	 */
 	@Operation(summary = "Find", description = "Method that return a list of Loans")
 	@RequestMapping(path = "", method = RequestMethod.GET)
-	public List<AuthorDto> findAll() {
+	public List<LoanDto> findAll() {
 
 		List<Loan> loans = this.loanService.findAll();
 
-		return loans.stream().map(e -> mapper.map(e, AuthorDto.class)).collect(Collectors.toList());
+		return loans.stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList());
 	}
 
 	/**
-	 * Método para recuperar un listado paginado de {@link Author}
+	 * Método para recuperar un listado paginado de {@link Loan}
 	 *
 	 * @param dto dto de búsqueda
 	 * @return {@link Page} de {@link LoanDto}
@@ -79,5 +79,33 @@ public class LoanController {
 				page.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()),
 				page.getPageable(), page.getTotalElements());
 	}
+	
+	 /**
+     * Método para crear o actualizar un {@link Author}
+     *
+     *
+     *
+     * @param id PK de la entidad
+     * @param dto datos de la entidad
+     */
+    @Operation(summary = "Save or Update", description = "Method that saves or updates a Loan")
+    
+    @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
+    public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody LoanDto dto) {
+
+    	this.loanService.save(id, dto);
+    }
+    
+    /**
+     * Método para eliminar un {@link Loan}
+     *
+     * @param id PK de la entidad
+     */
+    @Operation(summary = "Delete", description = "Method that deletes a Loan")
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") Long id) throws Exception {
+
+    	 this.loanService.delete(id);
+    }
 
 }

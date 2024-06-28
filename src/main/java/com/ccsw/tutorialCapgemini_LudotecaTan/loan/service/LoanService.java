@@ -33,7 +33,7 @@ public interface LoanService {
 	Loan get(Long id);
 
 	/**
-	 * Recupera un listado de autores {@link Loan}
+	 * Recupera un listado de {@link Loan}
 	 *
 	 * @return {@link List} de {@link Loan}
 	 */

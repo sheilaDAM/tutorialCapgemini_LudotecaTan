@@ -5,8 +5,8 @@ package com.ccsw.tutorialCapgemini_LudotecaTan.loan.model;
 
 import java.time.LocalDate;
 
-import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.Client;
-import com.ccsw.tutorialCapgemini_LudotecaTan.game.model.Game;
+import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.ClientDto;
+import com.ccsw.tutorialCapgemini_LudotecaTan.game.model.GameDto;
 
 /**
  * Project info :)
@@ -23,9 +23,9 @@ public class LoanDto {
 	
 	private Long id;
 
-	private Client client;
+	private ClientDto client;
 
-	private Game game;
+	private GameDto game;
 	
 	private LocalDate startLoanDate;
 
@@ -45,31 +45,33 @@ public class LoanDto {
 		this.id = id;
 	}
 
+	
+	
 	/**
 	 * @return the client
 	 */
-	public Client getClient() {
+	public ClientDto getClient() {
 		return client;
 	}
 
 	/**
 	 * @param client the client to set
 	 */
-	public void setClient(Client client) {
+	public void setClient(ClientDto client) {
 		this.client = client;
 	}
 
 	/**
 	 * @return the game
 	 */
-	public Game getGame() {
+	public GameDto getGame() {
 		return game;
 	}
 
 	/**
 	 * @param game the game to set
 	 */
-	public void setGame(Game game) {
+	public void setGame(GameDto game) {
 		this.game = game;
 	}
 

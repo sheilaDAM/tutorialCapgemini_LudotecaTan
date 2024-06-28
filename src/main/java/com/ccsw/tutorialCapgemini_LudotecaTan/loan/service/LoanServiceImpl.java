@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.Author;
+import com.ccsw.tutorialCapgemini_LudotecaTan.client.service.ClientService;
+import com.ccsw.tutorialCapgemini_LudotecaTan.game.service.GameService;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
@@ -36,6 +37,21 @@ public class LoanServiceImpl implements LoanService {
 	@Autowired
 	LoanRepository loanRepository;
 
+	@Autowired
+	ClientService clientService;
+
+	@Autowired
+	GameService gameService;
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Loan get(Long id) {
+
+		return this.loanRepository.findById(id).orElse(null);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -52,7 +68,7 @@ public class LoanServiceImpl implements LoanService {
 	@Override
 	public Page<Loan> findPage(LoanSearchDto dto) {
 
-		return this.loanRepository.findAllInPage(dto.getPageable().getPageable());
+		return this.loanRepository.findAll(dto.getPageable().getPageable());
 	}
 
 	/**
@@ -69,7 +85,10 @@ public class LoanServiceImpl implements LoanService {
 			loan = this.get(id);
 		}
 
-		BeanUtils.copyProperties(dto, loan, "id");
+		BeanUtils.copyProperties(dto, loan, "id", "client", "game");
+
+		loan.setClient(clientService.get(dto.getClient().getId()));
+		loan.setGame(gameService.get(dto.getGame().getId()));
 
 		this.loanRepository.save(loan);
 
@@ -86,15 +105,6 @@ public class LoanServiceImpl implements LoanService {
 		}
 
 		this.loanRepository.deleteById(id);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Loan get(Long id) {
-
-		return this.loanRepository.findById(id).orElse(null);
 	}
 
 }

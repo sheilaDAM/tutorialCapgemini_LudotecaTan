@@ -60,12 +60,8 @@ public class GameController {
 
 		List<Game> games = gameService.find(title, idCategory);
 
-		return games.stream().map(e -> mapper.map(e, GameDto.class)).collect(Collectors.toList()); // Esta línea
-																									// transforma la
-																									// lista de Game en
-																									// una lista de
-																									// GameDto
-
+		// Trransformamos la lista de Game en una lista de GameDto
+		return games.stream().map(e -> mapper.map(e, GameDto.class)).collect(Collectors.toList());
 		/*
 		 * games.stream(): Convierte la lista de Game en un stream, lo que permite
 		 * realizar operaciones funcionales sobre la lista. .map(e -> mapper.map(e,
