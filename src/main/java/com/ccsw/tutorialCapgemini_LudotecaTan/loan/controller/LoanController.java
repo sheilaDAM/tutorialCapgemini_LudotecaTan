@@ -81,7 +81,7 @@ public class LoanController {
 	}
 	
 	 /**
-     * Método para crear o actualizar un {@link Author}
+     * Método para crear o actualizar un {@link Loan}
      *
      *
      *

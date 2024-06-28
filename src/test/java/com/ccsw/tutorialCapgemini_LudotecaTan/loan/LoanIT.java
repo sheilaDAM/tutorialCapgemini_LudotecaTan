@@ -22,6 +22,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
+import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.AuthorDto;
+import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.AuthorSearchDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.ClientDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.common.pagination.PageableRequest;
 import com.ccsw.tutorialCapgemini_LudotecaTan.config.ResponsePage;
@@ -65,6 +67,7 @@ public class LoanIT {
 	public static final LocalDate NEW_END_DATE = LocalDate.of(2024, 7, 30);
 
 	private static final int TOTAL_LOANS = 12;
+	private static final int PAGE_SIZE = 5;
 
 	@LocalServerPort
 	private int port;
@@ -148,6 +151,25 @@ public class LoanIT {
 		assertEquals(gameDto.getId(), loan.getGame().getId());
 		assertEquals(NEW_START_DATE, loan.getStartLoanDate());
 		assertEquals(NEW_END_DATE, loan.getEndLoanDate());
+	}
+
+	@Test
+	public void findFirstPageWithFiveSizeShouldReturnFirstFiveResults() {
+
+		/*
+		 * Verificamos que la primera página de resultados con un tamaño de página de 5
+		 * devuelve los primeros cinco préstamos.
+		 */
+
+		LoanSearchDto loanSearchDto = new LoanSearchDto();
+		loanSearchDto.setPageable(new PageableRequest(0, PAGE_SIZE));
+
+		ResponseEntity<ResponsePage<LoanDto>> response = restTemplate.exchange(LOCALHOST + port + SERVICE_PATH,
+				HttpMethod.POST, new HttpEntity<>(loanSearchDto), responseTypePage);
+
+		assertNotNull(response);
+		assertEquals(TOTAL_LOANS, response.getBody().getTotalElements());
+		assertEquals(PAGE_SIZE, response.getBody().getContent().size());
 	}
 
 	@Test
