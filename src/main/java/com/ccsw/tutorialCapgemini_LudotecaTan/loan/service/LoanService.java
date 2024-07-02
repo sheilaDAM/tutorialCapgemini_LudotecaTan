@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.ccsw.tutorialCapgemini_LudotecaTan.loan.exception.LoanConflictException;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
@@ -52,8 +53,9 @@ public interface LoanService {
 	 *
 	 * @param id  PK de la entidad
 	 * @param dto datos de la entidad
+	 * @throws LoanConflictException 
 	 */
-	void save(Long id, LoanDto dto);
+	void save (Long id, LoanDto dto) throws LoanConflictException;
 
 	/**
 	 * Método para crear o actualizar un {@link Loan}

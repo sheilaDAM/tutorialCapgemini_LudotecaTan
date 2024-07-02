@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ccsw.tutorialCapgemini_LudotecaTan.author.model.Author;
+import com.ccsw.tutorialCapgemini_LudotecaTan.loan.exception.LoanConflictException;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
@@ -79,33 +81,49 @@ public class LoanController {
 				page.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()),
 				page.getPageable(), page.getTotalElements());
 	}
-	
-	 /**
-     * Método para crear o actualizar un {@link Loan}
-     *
-     *
-     *
-     * @param id PK de la entidad
-     * @param dto datos de la entidad
-     */
-    @Operation(summary = "Save or Update", description = "Method that saves or updates a Loan")
-    
-    @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
-    public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody LoanDto dto) {
 
-    	this.loanService.save(id, dto);
-    }
-    
-    /**
-     * Método para eliminar un {@link Loan}
-     *
-     * @param id PK de la entidad
-     */
-    @Operation(summary = "Delete", description = "Method that deletes a Loan")
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") Long id) throws Exception {
+	/**
+	 * Método para crear o actualizar un {@link Loan}
+	 *
+	 *
+	 *
+	 * @param id  PK de la entidad
+	 * @param dto datos de la entidad
+	 */
 
-    	 this.loanService.delete(id);
-    }
+	@Operation(summary = "Save or Update", description = "Method that saves or updates a Loan")
+	@RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
+	public ResponseEntity<?> save(@PathVariable(name = "id", required = false) Long id, @RequestBody LoanDto dto) {
+		try {
+			this.loanService.save(id, dto);
+			return ResponseEntity.ok().build();
+		} catch (LoanConflictException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		} catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+	    }
+	}
+
+	/*
+	 * @Operation(summary = "Save or Update", description =
+	 * "Method that saves or updates a Loan")
+	 * 
+	 * @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT) public
+	 * void save(@PathVariable(name = "id", required = false) Long id, @RequestBody
+	 * LoanDto dto) {
+	 * 
+	 * this.loanService.save(id, dto); }
+	 */
+	/**
+	 * Método para eliminar un {@link Loan}
+	 *
+	 * @param id PK de la entidad
+	 */
+	@Operation(summary = "Delete", description = "Method that deletes a Loan")
+	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable("id") Long id) throws Exception {
+
+		this.loanService.delete(id);
+	}
 
 }

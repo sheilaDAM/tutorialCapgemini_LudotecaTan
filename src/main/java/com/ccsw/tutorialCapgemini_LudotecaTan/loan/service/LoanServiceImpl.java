@@ -3,6 +3,7 @@
  */
 package com.ccsw.tutorialCapgemini_LudotecaTan.loan.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.service.ClientService;
 import com.ccsw.tutorialCapgemini_LudotecaTan.game.service.GameService;
+import com.ccsw.tutorialCapgemini_LudotecaTan.loan.exception.LoanConflictException;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
@@ -75,7 +77,7 @@ public class LoanServiceImpl implements LoanService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void save(Long id, LoanDto dto) {
+	public void save(Long id, LoanDto dto) throws LoanConflictException {
 
 		Loan loan;
 
@@ -90,8 +92,29 @@ public class LoanServiceImpl implements LoanService {
 		loan.setClient(clientService.get(dto.getClient().getId()));
 		loan.setGame(gameService.get(dto.getGame().getId()));
 
+		// Validamos el préstamo antes de guardarlo
+
+		validateLoan(loan);
+
 		this.loanRepository.save(loan);
 
+	}
+
+	public void validateLoan(Loan loan) throws LoanConflictException {
+		LocalDate startDate = loan.getStartLoanDate();
+		LocalDate endDate = loan.getEndLoanDate();
+
+		// Validación 1: El mismo juego no puede estar prestado a dos clientes distintos
+		// en un mismo día
+		List<Loan> conflictingGameLoans = loanRepository
+				.findLoansWithTheSameDateRangeThatCurrent(loan.getGame().getId(), startDate, endDate);
+
+		for (Loan conflictingLoan : conflictingGameLoans) {
+			if (!conflictingLoan.getClient().getId().equals(loan.getClient().getId())) {
+				throw new LoanConflictException("El juego ya está prestado a otro cliente en el rango de fechas: "
+						+ conflictingLoan.getStartLoanDate() + " a " + conflictingLoan.getEndLoanDate());
+			}
+		}
 	}
 
 	/**
