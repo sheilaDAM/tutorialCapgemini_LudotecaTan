@@ -50,4 +50,16 @@ public interface LoanRepository extends JpaRepository<Loan, Long>, JpaSpecificat
 	List<Loan> findLoansWithTheSameDateRangeThatCurrent(@Param("gameId") Long gameId,
 			@Param("newStartDate") LocalDate newStartDate, @Param("newEndDate") LocalDate newEndDate);
 
+	/**
+	 * Método para comprobar que un mismo cliente no tenga más de dos juegos prestados 
+	 * en un mismo día o más de dos préstamos para ninguno de los días que contemplan 
+	 * las fechas actuales del rango  {@link Loan}
+	 *
+	 * @param pageable pageable
+	 * @return {@link Page} de {@link Loan}
+	 */
+	@Query("SELECT l FROM Loan l WHERE l.client.id = :clientId AND l.startLoanDate <= :newEndDate AND l.endLoanDate >= :newStartDate")
+	List<Loan> findLoansWithTheSameDateRangeForClient(@Param("clientId") Long clientId, @Param("newStartDate") LocalDate newStartDate, @Param("newEndDate") LocalDate newEndDate);
+
 }
+

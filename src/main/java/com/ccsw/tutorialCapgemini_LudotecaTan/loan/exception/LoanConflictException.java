@@ -3,6 +3,9 @@
  */
 package com.ccsw.tutorialCapgemini_LudotecaTan.loan.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  * Project info :)
  *
@@ -15,7 +18,8 @@ package com.ccsw.tutorialCapgemini_LudotecaTan.loan.exception;
  **/
 
 @SuppressWarnings("serial")
-public class LoanConflictException  extends Exception {
+@ResponseStatus(HttpStatus.CONFLICT)
+public class LoanConflictException extends RuntimeException {
     public LoanConflictException(String message) {
         super(message);
     }

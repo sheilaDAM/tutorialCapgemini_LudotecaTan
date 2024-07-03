@@ -97,11 +97,12 @@ public class LoanController {
 		try {
 			this.loanService.save(id, dto);
 			return ResponseEntity.ok().build();
+			// return ResponseEntity.ok("Loan saved successfully.");
 		} catch (LoanConflictException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		} catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-	    }
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 
 	/*
