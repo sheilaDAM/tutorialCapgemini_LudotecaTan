@@ -3,9 +3,10 @@
  */
 package com.ccsw.tutorialCapgemini_LudotecaTan.loan.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.exception.LoanConflictException;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
@@ -46,7 +47,9 @@ public interface LoanService {
 	 * @param dto dto de búsqueda
 	 * @return {@link Page} de {@link Loan}
 	 */
-	Page<Loan> findPage(LoanSearchDto dto);
+	//Page<Loan> findPage(LoanSearchDto dto);
+	
+	Page<Loan> findPage(LoanSearchDto dto, Pageable pageable);
 
 	/**
 	 * Método para crear o actualizar un {@link Loan}

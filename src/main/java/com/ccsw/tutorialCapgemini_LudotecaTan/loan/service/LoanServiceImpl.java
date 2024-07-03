@@ -4,15 +4,23 @@
 package com.ccsw.tutorialCapgemini_LudotecaTan.loan.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ccsw.tutorialCapgemini_LudotecaTan.client.service.ClientService;
+import com.ccsw.tutorialCapgemini_LudotecaTan.common.criteria.SearchCriteria;
 import com.ccsw.tutorialCapgemini_LudotecaTan.game.service.GameService;
+import com.ccsw.tutorialCapgemini_LudotecaTan.loan.LoanSpecification;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.exception.LoanConflictException;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.Loan;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanDto;
@@ -20,6 +28,7 @@ import com.ccsw.tutorialCapgemini_LudotecaTan.loan.model.LoanSearchDto;
 import com.ccsw.tutorialCapgemini_LudotecaTan.loan.repository.LoanRepository;
 
 import jakarta.transaction.Transactional;
+
 
 /**
  * Project info :)
@@ -44,6 +53,7 @@ public class LoanServiceImpl implements LoanService {
 
 	@Autowired
 	GameService gameService;
+	
 
 	/**
 	 * {@inheritDoc}
@@ -67,10 +77,45 @@ public class LoanServiceImpl implements LoanService {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public Page<Loan> findPage(LoanSearchDto dto) {
+	/*
+	 * @Override public Page<Loan> findPage(LoanSearchDto dto) {
+	 * 
+	 * return this.loanRepository.findAll(dto.getPageable().getPageable()); }
+	 */
 
-		return this.loanRepository.findAll(dto.getPageable().getPageable());
+	@Override
+	public Page<Loan> findPage(LoanSearchDto searchDto, Pageable pageable) {
+		List<Specification<Loan>> specs = new ArrayList<>();
+
+		if (searchDto.getGameTitle() != null && !searchDto.getGameTitle().isEmpty()) {
+			specs.add(new LoanSpecification(new SearchCriteria("game.title", ":", searchDto.getGameTitle())));
+		}
+		if (searchDto.getClientId() != null) {
+			specs.add(new LoanSpecification(new SearchCriteria("client.id", ":", searchDto.getClientId())));
+		}
+		if (searchDto.getStartDate() != null) {
+			specs.add(new LoanSpecification(new SearchCriteria("startLoanDate", ">=", searchDto.getStartDate())));
+		}
+		/*
+		if (searchDto.getEndDate() != null) {
+			specs.add(new LoanSpecification(new SearchCriteria("endLoanDate", "<=", searchDto.getEndDate())));
+		}
+		*/
+		
+		Specification<Loan> finalSpec = specs.stream().reduce(Specification::and).orElse(null);
+
+		// Ordenación personalizada para mostrar el listado, primero por startLoanDate de menor a mayor, luego por id de menor a mayor
+		Sort sort = Sort.by(Sort.Order.asc("startLoanDate"), Sort.Order.asc("id"));
+		Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+		return loanRepository.findAll(finalSpec, sortedPageable);
+		
+
+		/*
+		Specification<Loan> finalSpec = specs.stream().reduce(Specification::and).orElse(null);
+		
+		return loanRepository.findAll(finalSpec, pageable);
+		*/
 	}
 
 	/**
@@ -104,6 +149,8 @@ public class LoanServiceImpl implements LoanService {
 		LocalDate startDate = loan.getStartLoanDate();
 		LocalDate endDate = loan.getEndLoanDate();
 
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
 		System.out.println("Fecha nuevo préstamo: " + loan.getStartLoanDate() + " - " + loan.getEndLoanDate());
 
 		// Validación 1: El mismo juego no puede estar prestado a dos clientes distintos
@@ -113,14 +160,18 @@ public class LoanServiceImpl implements LoanService {
 				.findLoansWithTheSameDateRangeThatCurrent(loan.getGame().getId(), startDate, endDate);
 
 		System.out.println("Préstamos conflictivos encontrados: " + conflictingGameLoans.size());
+
 		for (Loan conflictingLoan : conflictingGameLoans) {
 			System.out.println("Préstamo conflictivo: " + conflictingLoan.getStartLoanDate() + " a "
 					+ conflictingLoan.getEndLoanDate() + " Cliente: " + conflictingLoan.getClient().getName());
+
 			System.out.println("El juego " + conflictingLoan.getGame().getTitle() + " ya está prestado al "
 					+ "Cliente: " + conflictingLoan.getClient().getName());
+
 			if (!conflictingLoan.getClient().getId().equals(loan.getClient().getId())) {
 				throw new LoanConflictException("El juego ya está prestado a otro cliente en el rango de fechas: "
-						+ conflictingLoan.getStartLoanDate() + " a " + conflictingLoan.getEndLoanDate());
+						+ conflictingLoan.getStartLoanDate().format(formatter) + " a "
+						+ conflictingLoan.getEndLoanDate().format(formatter));
 			}
 		}
 
@@ -129,10 +180,11 @@ public class LoanServiceImpl implements LoanService {
 		List<Loan> clientConflictLoans = loanRepository.findLoansWithTheSameDateRangeForClient(loan.getClient().getId(),
 				startDate, endDate);
 		System.out.println("Validación 2 Préstamos conflictivos encontrados: " + clientConflictLoans.size());
-		if (clientConflictLoans.size() >= 2
-				|| (clientConflictLoans.size() == 2 && !clientConflictLoans.stream().allMatch(l -> l.getId().equals(loan.getId())))) {
+		if (clientConflictLoans.size() >= 2 || (clientConflictLoans.size() == 2
+				&& !clientConflictLoans.stream().allMatch(l -> l.getId().equals(loan.getId())))) {
 			throw new LoanConflictException(
-					"El cliente ya tiene más de 2 préstamos en el rango de fechas: " + startDate + " a " + endDate);
+					"El cliente " + loan.getClient().getName() + " ya tiene más de 2 préstamos en el rango de fechas: "
+							+ startDate.format(formatter) + " a " + endDate.format(formatter));
 		}
 	}
 
@@ -148,5 +200,6 @@ public class LoanServiceImpl implements LoanService {
 
 		this.loanRepository.deleteById(id);
 	}
+
 
 }

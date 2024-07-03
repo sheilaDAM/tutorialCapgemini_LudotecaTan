@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,7 +50,7 @@ public class LoanController {
 	LoanService loanService;
 
 	@Autowired
-	ModelMapper mapper;
+	ModelMapper modelMapper;
 
 	/**
 	 * Recupera un listado de {@link Loan}
@@ -62,7 +63,7 @@ public class LoanController {
 
 		List<Loan> loans = this.loanService.findAll();
 
-		return loans.stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList());
+		return loans.stream().map(e -> modelMapper.map(e, LoanDto.class)).collect(Collectors.toList());
 	}
 
 	/**
@@ -71,16 +72,31 @@ public class LoanController {
 	 * @param dto dto de búsqueda
 	 * @return {@link Page} de {@link LoanDto}
 	 */
-	@Operation(summary = "Find Page", description = "Method that return a page of Loans")
-	@RequestMapping(path = "", method = RequestMethod.POST)
-	public Page<LoanDto> findPage(@RequestBody LoanSearchDto dto) {
+	/*
+	 * @Operation(summary = "Find Page", description =
+	 * "Method that return a page of Loans")
+	 * 
+	 * @RequestMapping(path = "", method = RequestMethod.POST) public Page<LoanDto>
+	 * findPage(@RequestBody LoanSearchDto dto) {
+	 * 
+	 * Page<Loan> page = this.loanService.findPage(dto);
+	 * 
+	 * return new PageImpl<>( page.getContent().stream().map(e -> mapper.map(e,
+	 * LoanDto.class)).collect(Collectors.toList()), page.getPageable(),
+	 * page.getTotalElements()); }
+	 */
 
-		Page<Loan> page = this.loanService.findPage(dto);
+	@Operation(summary = "Find Page", description = "Method that returns a page of Loans")
+    @RequestMapping(path = "/page", method = RequestMethod.POST)
+    public Page<LoanDto> findPage(@RequestBody LoanSearchDto dto) {
+        Pageable pageable = dto.getPageable().getPageable();
+        Page<Loan> loanPage = this.loanService.findPage(dto, pageable);
+        List<LoanDto> loanDtos = loanPage.getContent().stream()
+                .map(loan -> modelMapper.map(loan, LoanDto.class))
+                .collect(Collectors.toList());
+        return new PageImpl<>(loanDtos, pageable, loanPage.getTotalElements());
+    }
 
-		return new PageImpl<>(
-				page.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()),
-				page.getPageable(), page.getTotalElements());
-	}
 
 	/**
 	 * Método para crear o actualizar un {@link Loan}
