@@ -65,6 +65,13 @@ public interface LoanRepository extends JpaRepository<Loan, Long>, JpaSpecificat
 	List<Loan> findLoansWithTheSameDateRangeForClient(@Param("clientId") Long clientId,
 			@Param("newStartDate") LocalDate newStartDate, @Param("newEndDate") LocalDate newEndDate);
 
+	/**
+	 * Método para recuperar un listado paginado y filtrado de {@link Loan}.
+	 *
+	 * @param spec     Specification que contiene los criterios de búsqueda y filtrado.
+	 * @param pageable Pageable que contiene la información de paginación y ordenación.
+	 * @return {@link Page} de {@link Loan} que coincide con los criterios de búsqueda y paginación.
+	 */
 	@EntityGraph(attributePaths = { "game.title", "client.id", "startLoanDate", "endLoanDate" })
 	Page<Loan> findAll(Specification<Loan> spec, Pageable pageable);
 }
