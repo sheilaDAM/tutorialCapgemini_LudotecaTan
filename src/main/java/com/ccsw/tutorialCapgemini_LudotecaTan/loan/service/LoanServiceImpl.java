@@ -149,6 +149,7 @@ public class LoanServiceImpl implements LoanService {
 		LocalDate startDate = loan.getStartLoanDate();
 		LocalDate endDate = loan.getEndLoanDate();
 
+		//lo pasamos a este formato para mostrarlo así en el posible mensaje de error 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 		System.out.println("Fecha nuevo préstamo: " + loan.getStartLoanDate() + " - " + loan.getEndLoanDate());
@@ -168,11 +169,19 @@ public class LoanServiceImpl implements LoanService {
 			System.out.println("El juego " + conflictingLoan.getGame().getTitle() + " ya está prestado al "
 					+ "Cliente: " + conflictingLoan.getClient().getName());
 
+			// Si el préstamo conflictivo pertenece a otro cliente, lanza una excepción
 			if (!conflictingLoan.getClient().getId().equals(loan.getClient().getId())) {
 				throw new LoanConflictException("El juego ya está prestado a otro cliente en el rango de fechas: "
 						+ conflictingLoan.getStartLoanDate().format(formatter) + " a "
 						+ conflictingLoan.getEndLoanDate().format(formatter));
 			}
+			
+			 // Si el préstamo conflictivo pertenece al mismo cliente, se lanzará esta excepción
+	        if (conflictingLoan.getClient().getId().equals(loan.getClient().getId())) {
+	            throw new LoanConflictException("Este cliente ya tiene una reserva para este juego en el rango de fechas: "
+	                    + conflictingLoan.getStartLoanDate().format(formatter) + " a "
+	                    + conflictingLoan.getEndLoanDate().format(formatter));
+	        }
 		}
 
 		// Validación 2: Un cliente no puede tener más de 2 préstamos en un mismo día o

@@ -30,8 +30,15 @@ import com.ccsw.tutorialCapgemini_LudotecaTan.client.model.Client;
 public interface ClientRepository extends CrudRepository<Client, Long> {
 	
 	//añadimos una consulta a bbdd para verificar si el nombre de un Nuevo cliente ya existe
+	/*
 	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN TRUE ELSE FALSE END FROM Client c WHERE c.name = :name")
 	boolean clientAlreadyExistsByName(@Param("name") String name);
+	*/
+	
+	//verificar si el nombre de un Nuevo cliente ya existe ignorando mayúsculas y minúsculas:
+	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN TRUE ELSE FALSE END FROM Client c WHERE LOWER(c.name) = LOWER(:name)")
+	boolean clientAlreadyExistsByName(@Param("name") String name);
+
 	
 	/*
 	 * Esta consulta cuenta el número de clientes que ya existe en la bbdd con el nombre dado,
